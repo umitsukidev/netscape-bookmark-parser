@@ -10,5 +10,5 @@ export default defineConfig({
 	sourcemap: true,
 	outDir: "./dist",
 	platform: "neutral",
-	external: ["jsdom"],
+	external: ["@b-fuze/deno-dom"],
 });

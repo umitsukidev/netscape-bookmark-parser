@@ -219,7 +219,7 @@ test("BookmarksTree - toDOM() 複雑な階層構造", () => {
 
 	// フォルダ構造を確認
 	const h3Elements = dom.querySelectorAll("h3");
-	const folderNames = Array.from(h3Elements).map((h3: any) => h3.textContent);
+	const folderNames = Array.from(h3Elements).map((h3) => h3.textContent);
 	assertEquals(folderNames.includes("Development"), true);
 	assertEquals(folderNames.includes("Tools"), true);
 });

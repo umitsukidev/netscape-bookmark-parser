@@ -5,10 +5,7 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { JSDOM } from "jsdom";
+import { DOMParser as NodeDOMParser } from "@b-fuze/deno-dom";
 import { setDOMParser } from "./dom.ts";
 
-const jsdom = new JSDOM("");
-const NodeDOMParserClass = jsdom.window.DOMParser;
-
-setDOMParser(NodeDOMParserClass as unknown as typeof globalThis.DOMParser);
+setDOMParser(NodeDOMParser);

@@ -400,7 +400,7 @@ pnpm build
 
 ## 依存関係
 
-- [`jsdom`](https://github.com/jsdom/jsdom): Node.js 環境向けの DOM パーサ・操作
+- [`@b-fuze/deno-dom`](https://jsr.io/@b-fuze/deno-dom): Deno/Node.js 両対応の DOM パーサ・操作
 
 ## ブラウザ互換性
 

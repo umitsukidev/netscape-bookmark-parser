@@ -403,7 +403,7 @@ Create a release note with `pnpm changeset`. Changesets opens a version pull req
 
 ## Dependencies
 
-- [`jsdom`](https://github.com/jsdom/jsdom): DOM parser and manipulation for Node.js environments
+- [`@b-fuze/deno-dom`](https://jsr.io/@b-fuze/deno-dom): DOM parser and manipulation for both Deno and Node.js environments
 
 ## Browser Compatibility
 
