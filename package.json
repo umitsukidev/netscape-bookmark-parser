@@ -47,11 +47,15 @@
 		"check": "oxfmt --check && oxlint && pnpm typecheck",
 		"version-packages": "changeset version && pnpm sync:jsr-version",
 		"sync:jsr-version": "node scripts/sync-jsr-version.mjs",
+		"prepack": "node scripts/prepack.mjs",
+		"postpack": "node scripts/postpack.mjs",
 		"prepare": "lefthook install"
 	},
+	"dependencies": {
+		"@b-fuze/deno-dom": "jsr:@b-fuze/deno-dom@^0.1.49"
+	},
 	"devDependencies": {
-		"@b-fuze/deno-dom": "jsr:@b-fuze/deno-dom@^0.1.49",
-		"@changesets/cli": "^2.29.5",
+		"@changesets/cli": "^3.0.3",
 		"@changesets/config": "^4.0.1",
 		"@types/node": "^24.0.0",
 		"lefthook": "^2.1.14",
