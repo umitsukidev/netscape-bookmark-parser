@@ -52,6 +52,12 @@ jobs:
           version: 12.4.2
           require-lockfile: true
           cache: true
+      - name: Configure NPM authentication
+        if: steps.version.outputs.should_release == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.x
+          registry-url: https://registry.npmjs.org
       - name: Test
         if: steps.version.outputs.should_release == 'true'
         run: pnpm test
@@ -68,7 +74,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Publish to JSR
         if: steps.version.outputs.should_release == 'true'
-        run: pnpm dlx jsr publish
+        run: pnpm dlx jsr publish --provenance
       - name: Create Git tag
         if: steps.version.outputs.should_release == 'true'
         run: |
