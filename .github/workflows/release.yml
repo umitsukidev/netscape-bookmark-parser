@@ -15,8 +15,13 @@ permissions:
   id-token: write
 
 jobs:
-  release:
+  detect:
     runs-on: ubuntu-latest
+    outputs:
+      should_release: ${{ steps.version.outputs.should_release }}
+      version: ${{ steps.version.outputs.version }}
+      tag: ${{ steps.version.outputs.tag }}
+      sha: ${{ steps.version.outputs.sha }}
     steps:
       - name: Checkout
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
@@ -53,46 +58,45 @@ jobs:
             echo "tag=${tag}" >> "$GITHUB_OUTPUT"
             echo "sha=${sha}" >> "$GITHUB_OUTPUT"
           fi
+
+  release:
+    needs: detect
+    if: needs.detect.outputs.should_release == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
       - name: Setup pnpm and Node.js
-        if: steps.version.outputs.should_release == 'true'
         uses: pnpm/setup@703c52620218391530e48b9e8870d5c0082e1b9b # v2.1.0
         with:
           require-lockfile: true
-          cache: true
       - name: Configure NPM authentication
-        if: steps.version.outputs.should_release == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: 24.x
           registry-url: https://registry.npmjs.org
       - name: Test
-        if: steps.version.outputs.should_release == 'true'
         run: pnpm test
       - name: Typecheck
-        if: steps.version.outputs.should_release == 'true'
         run: pnpm typecheck
       - name: Build
-        if: steps.version.outputs.should_release == 'true'
         run: pnpm build
       - name: Publish to NPM
-        if: steps.version.outputs.should_release == 'true'
         run: |
-          if pnpm view "netscape-bookmark-parser@${{ steps.version.outputs.version }}" version --silent >/dev/null 2>&1; then
-            echo "NPM version ${{ steps.version.outputs.version }} is already published"
+          if pnpm view "netscape-bookmark-parser@${{ needs.detect.outputs.version }}" version --silent >/dev/null 2>&1; then
+            echo "NPM version ${{ needs.detect.outputs.version }} is already published"
           else
             pnpm publish --no-git-checks --provenance --access public
           fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Publish to JSR
-        if: steps.version.outputs.should_release == 'true'
         run: pnpm dlx jsr publish --provenance
       - name: Create GitHub release
-        if: steps.version.outputs.should_release == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: >-
-          gh release create "${{ steps.version.outputs.tag }}"
-          --target "${{ steps.version.outputs.sha }}"
-          --title "${{ steps.version.outputs.tag }}"
+          gh release create "${{ needs.detect.outputs.tag }}"
+          --target "${{ needs.detect.outputs.sha }}"
+          --title "${{ needs.detect.outputs.tag }}"
           --generate-notes
