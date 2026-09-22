@@ -52,19 +52,19 @@
 		"prepare": "lefthook install"
 	},
 	"dependencies": {
-		"@b-fuze/deno-dom": "jsr:@b-fuze/deno-dom@^0.1.49"
+		"@b-fuze/deno-dom": "jsr:^0.1.56"
 	},
 	"devDependencies": {
 		"@changesets/cli": "^3.0.3",
 		"@changesets/config": "^4.0.1",
-		"@types/node": "^24.0.0",
+		"@types/node": "^26.6.2",
 		"lefthook": "^2.1.14",
 		"oxfmt": "^0.68.0",
 		"oxlint": "^1.83.0",
 		"oxlint-tsgolint": "^7.0.2002",
-		"tsdown": "^0.15.0",
-		"typescript": "^5.9.0",
-		"vitest": "^3.2.4"
+		"tsdown": "^0.23.0",
+		"typescript": "^7.0.2",
+		"vitest": "^5.0.1"
 	},
 	"devEngines": {
 		"packageManager": {
