@@ -1,6 +1,6 @@
 {
 	"name": "netscape-bookmark-parser",
-	"version": "1.2.0",
+	"version": "1.2.1",
 	"description": "Parse Netscape bookmark HTML files and manipulate them as structured data.",
 	"keywords": [
 		"bookmark",
