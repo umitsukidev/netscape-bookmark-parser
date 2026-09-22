@@ -29,3 +29,5 @@ jobs:
         run: pnpm typecheck
       - name: Build
         run: pnpm build
+      - name: Check formatting and lint
+        run: pnpm check

@@ -6,7 +6,6 @@
 		".": "./src/index.ts"
 	},
 	"imports": {
-		"@b-fuze/deno-dom": "jsr:@b-fuze/deno-dom@^0.1.49",
 		"#dom-types": "./src/node-dom-types.ts"
 	},
 	"publish": {

@@ -1,9 +1,11 @@
 name: Changesets
 
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows: ["CI"]
+    branches: [main]
+    types:
+      - completed
 
 concurrency:
   group: changesets-${{ github.ref }}
@@ -15,6 +17,7 @@ permissions:
 
 jobs:
   version:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
