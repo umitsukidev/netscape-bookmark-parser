@@ -13,4 +13,7 @@ export default defineConfig({
 	loader: {
 		".wasm": "binary",
 	},
+	deps: {
+		alwaysBundle: ["@b-fuze/deno-dom"],
+	},
 });

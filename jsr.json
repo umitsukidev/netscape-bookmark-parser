@@ -6,21 +6,10 @@
 		".": "./src/index.ts"
 	},
 	"imports": {
-		"@b-fuze/deno-dom": "jsr:@b-fuze/deno-dom@^0.1.49",
 		"#dom-types": "./src/node-dom-types.ts"
 	},
 	"publish": {
-		"include": [
-			"src/**/*.ts",
-			"README.md",
-			"README-ja.md",
-			"LICENSE"
-		],
-		"exclude": [
-			"**/*.test.ts",
-			"src/web.ts",
-			"src/web-dom.ts",
-			"src/web-dom-types.ts"
-		]
+		"include": ["src/**/*.ts", "README.md", "README-ja.md", "LICENSE"],
+		"exclude": ["**/*.test.ts", "src/web.ts", "src/web-dom.ts", "src/web-dom-types.ts"]
 	}
 }

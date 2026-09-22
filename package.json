@@ -45,14 +45,14 @@
 		"test:watch": "vitest",
 		"changeset": "changeset",
 		"check": "oxfmt --check && oxlint && pnpm typecheck",
-		"version-packages": "changeset version && pnpm sync:jsr-version",
+		"version-packages": "changeset version && pnpm sync:jsr-version && oxfmt jsr.json",
 		"sync:jsr-version": "node scripts/sync-jsr-version.mjs",
 		"prepack": "node scripts/prepack.mjs",
 		"postpack": "node scripts/postpack.mjs",
 		"prepare": "lefthook install"
 	},
 	"dependencies": {
-		"@b-fuze/deno-dom": "jsr:^0.1.56"
+		"@b-fuze/deno-dom": "npm:@jsr/b-fuze__deno-dom@^0.1.56"
 	},
 	"devDependencies": {
 		"@changesets/cli": "^3.0.3",
