@@ -1,60 +1,64 @@
 {
-	"name": "netscape-bookmark-parser",
-	"version": "1.1.4",
-	"description": "Parse Netscape bookmark HTML files and manipulate them as structured data.",
-	"keywords": [
-		"bookmark",
-		"parser",
-		"netscape"
-	],
-	"author": "grakeice",
-	"license": "MIT",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/umitsukidev/netscape-bookmark-parser.git"
-	},
-	"bugs": {
-		"url": "https://github.com/umitsukidev/netscape-bookmark-parser/issues"
-	},
-	"homepage": "https://github.com/umitsukidev/netscape-bookmark-parser#readme",
-	"type": "module",
-	"packageManager": "pnpm@12.4.2",
-	"exports": {
-		".": {
-			"types": "./dist/index.d.ts",
-			"import": "./dist/index.js"
-		},
-		"./web": {
-			"types": "./dist/web.d.ts",
-			"import": "./dist/web.js"
-		}
-	},
-	"files": [
-		"dist",
-		"LICENSE",
-		"README.md",
-		"README-ja.md"
-	],
-	"scripts": {
-		"build": "tsdown --config tsdown.config.ts && tsdown --config tsdown.web.config.ts",
-		"typecheck": "tsc --noEmit",
-		"test": "vitest run",
-		"test:watch": "vitest",
-		"changeset": "changeset",
-		"version-packages": "changeset version && pnpm sync:jsr-version",
-		"sync:jsr-version": "node scripts/sync-jsr-version.mjs"
-	},
-	"publishConfig": {
-		"access": "public",
-		"provenance": true
-	},
-	"dependencies": {},
-	"devDependencies": {
-		"@b-fuze/deno-dom": "jsr:@b-fuze/deno-dom@^0.1.49",
-		"@changesets/cli": "^2.29.5",
-		"@types/node": "^24.0.0",
-		"tsdown": "^0.15.0",
-		"typescript": "^5.9.0",
-		"vitest": "^3.2.4"
-	}
+  "name": "netscape-bookmark-parser",
+  "version": "1.1.4",
+  "description": "Parse Netscape bookmark HTML files and manipulate them as structured data.",
+  "keywords": [
+    "bookmark",
+    "netscape",
+    "parser"
+  ],
+  "homepage": "https://github.com/umitsukidev/netscape-bookmark-parser#readme",
+  "bugs": {
+    "url": "https://github.com/umitsukidev/netscape-bookmark-parser/issues"
+  },
+  "license": "MIT",
+  "author": "grakeice",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/umitsukidev/netscape-bookmark-parser.git"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md",
+    "README-ja.md"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./web": {
+      "types": "./dist/web.d.ts",
+      "import": "./dist/web.js"
+    }
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "scripts": {
+    "build": "tsdown --config tsdown.config.ts && tsdown --config tsdown.web.config.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "changeset": "changeset",
+    "version-packages": "changeset version && pnpm sync:jsr-version",
+    "sync:jsr-version": "node scripts/sync-jsr-version.mjs",
+    "prepare": "lefthook install"
+  },
+  "devDependencies": {
+    "@b-fuze/deno-dom": "jsr:@b-fuze/deno-dom@^0.1.49",
+    "@changesets/cli": "^2.29.5",
+    "@types/node": "^24.0.0",
+    "lefthook": "^2.1.14",
+    "oxfmt": "^0.68.0",
+    "oxlint": "^1.83.0",
+    "oxlint-tsgolint": "^7.0.2002",
+    "tsdown": "^0.15.0",
+    "typescript": "^5.9.0",
+    "vitest": "^3.2.4"
+  },
+  "packageManager": "pnpm@12.4.2"
 }
