@@ -84,10 +84,7 @@ export class BookmarksTree extends Map<string, string | BookmarksTree> {
 				if (typeof value === "string") {
 					tree.set(key, value);
 				} else if (typeof value === "object" && value !== null) {
-					tree.set(
-						key,
-						BookmarksTree.fromJSON(value as Record<string, unknown>)
-					);
+					tree.set(key, BookmarksTree.fromJSON(value as Record<string, unknown>));
 				}
 			}
 		}
@@ -202,18 +199,13 @@ export class BookmarksTree extends Map<string, string | BookmarksTree> {
 				.replace(/'/g, "&#39;");
 		};
 
-		const createBookmarkList = (
-			tree: BookmarksTree,
-			indent: string = ""
-		): string => {
+		const createBookmarkList = (tree: BookmarksTree, indent: string = ""): string => {
 			let html = `${indent}<DL><p>\n`;
 
 			for (const [key, value] of tree.entries()) {
 				if (typeof value === "string") {
 					// ブックマークの場合: <DT><A HREF="url">タイトル</A>
-					html += `${indent}    <DT><A HREF="${escapeHtml(value)}">${escapeHtml(
-						key
-					)}</A>\n`;
+					html += `${indent}    <DT><A HREF="${escapeHtml(value)}">${escapeHtml(key)}</A>\n`;
 				} else if (value instanceof BookmarksTree) {
 					// フォルダの場合: <DT><H3>フォルダ名</H3>
 					html += `${indent}    <DT><H3>${escapeHtml(key)}</H3>\n`;

@@ -10,12 +10,9 @@ import "../node-dom.ts";
 import { DOMParser } from "../dom.ts";
 import { BookmarksTree } from "./BookmarksTree.ts";
 
-const assertEquals = (actual: unknown, expected: unknown) =>
-	expect(actual).toEqual(expected);
-const assertInstanceOf = (
-	actual: unknown,
-	expected: abstract new (...args: any[]) => any,
-) => expect(actual).toBeInstanceOf(expected);
+const assertEquals = (actual: unknown, expected: unknown) => expect(actual).toEqual(expected);
+const assertInstanceOf = (actual: unknown, expected: abstract new (...args: any[]) => any) =>
+	expect(actual).toBeInstanceOf(expected);
 
 test("BookmarksTree - 基本的な操作", () => {
 	const tree = new BookmarksTree();
@@ -284,20 +281,14 @@ test("BookmarksTree - 特殊文字のエスケープ処理", () => {
 
 	// HTML エンティティのエスケープを確認
 	assertEquals(
-		htmlString.includes("Test &amp; Example") ||
-			htmlString.includes("Test & Example"),
-		true
+		htmlString.includes("Test &amp; Example") || htmlString.includes("Test & Example"),
+		true,
 	);
 	assertEquals(
-		htmlString.includes("Quote &quot;Test&quot;") ||
-			htmlString.includes('Quote "Test"'),
-		true
+		htmlString.includes("Quote &quot;Test&quot;") || htmlString.includes('Quote "Test"'),
+		true,
 	);
-	assertEquals(
-		htmlString.includes("Tag &lt;Test&gt;") ||
-			htmlString.includes("Tag <Test>"),
-		true
-	);
+	assertEquals(htmlString.includes("Tag &lt;Test&gt;") || htmlString.includes("Tag <Test>"), true);
 });
 
 test("BookmarksTree - 大きな階層構造の処理", () => {
@@ -481,22 +472,19 @@ test("BookmarksTree - 循環参照の防止", () => {
 	assertEquals(nestedFolder["Link"], "https://example.com");
 });
 
-test(
-	"BookmarksTree - HTMLString/HTMLText getter returns same value",
-	() => {
-		const tree = new BookmarksTree();
-		tree.set("Google", "https://google.com");
-		tree.set("GitHub", "https://github.com");
+test("BookmarksTree - HTMLString/HTMLText getter returns same value", () => {
+	const tree = new BookmarksTree();
+	tree.set("Google", "https://google.com");
+	tree.set("GitHub", "https://github.com");
 
-		const htmlString = tree.HTMLString;
-		const htmlText = tree.HTMLText;
+	const htmlString = tree.HTMLString;
+	const htmlText = tree.HTMLText;
 
-		assertEquals(htmlString, htmlText);
-		assertEquals(typeof htmlString, "string");
-		assertEquals(htmlString.includes("https://google.com"), true);
-		assertEquals(htmlString.includes("https://github.com"), true);
-	}
-);
+	assertEquals(htmlString, htmlText);
+	assertEquals(typeof htmlString, "string");
+	assertEquals(htmlString.includes("https://google.com"), true);
+	assertEquals(htmlString.includes("https://github.com"), true);
+});
 
 test("BookmarksTree - HTMLText is deprecated alias for HTMLString", () => {
 	const tree = new BookmarksTree();

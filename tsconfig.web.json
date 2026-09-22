@@ -1,7 +1,7 @@
 {
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "paths": {"#dom-types": ["./src/web-dom-types.ts"]}
-  },
-  "include": ["src/web.ts"]
+	"extends": "./tsconfig.json",
+	"compilerOptions": {
+		"paths": { "#dom-types": ["./src/web-dom-types.ts"] }
+	},
+	"include": ["src/web.ts"]
 }

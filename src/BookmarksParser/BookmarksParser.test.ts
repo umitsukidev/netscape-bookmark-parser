@@ -10,12 +10,9 @@ import { BookmarksParser } from "./BookmarksParser.ts";
 import { BookmarksTree } from "../BookmarksTree/index.ts";
 import { DOMParser } from "../dom.ts";
 
-const assertEquals = (actual: unknown, expected: unknown) =>
-	expect(actual).toEqual(expected);
-const assertInstanceOf = (
-	actual: unknown,
-	expected: abstract new (...args: any[]) => any,
-) => expect(actual).toBeInstanceOf(expected);
+const assertEquals = (actual: unknown, expected: unknown) => expect(actual).toEqual(expected);
+const assertInstanceOf = (actual: unknown, expected: abstract new (...args: any[]) => any) =>
+	expect(actual).toBeInstanceOf(expected);
 const assertThrows = (fn: () => unknown) => expect(fn).toThrow();
 
 test("Parser - 基本的なHTMLパース", () => {
@@ -182,10 +179,7 @@ test("Parser - 特殊文字を含むHTMLパース", () => {
 
 	const tree = BookmarksParser.parse(htmlContent);
 
-	assertEquals(
-		tree.get("検索 & テスト"),
-		"https://example.com/?q=hello%20world&lang=ja"
-	);
+	assertEquals(tree.get("検索 & テスト"), "https://example.com/?q=hello%20world&lang=ja");
 	assertInstanceOf(tree.get("フォルダ <テスト>"), BookmarksTree);
 
 	const testFolder = tree.get("フォルダ <テスト>") as BookmarksTree;
@@ -221,14 +215,14 @@ test("Parser - HREF属性のないリンクの処理", () => {
 });
 
 test("Parser.parseFromHTMLString works like parse", () => {
-	const html = `<!DOCTYPE NETSCAPE-Bookmark-file-1>\n<HTML>\n<BODY>\n<DL><p>\n    <DT><A HREF=\"https://google.com\">Google</A>\n</DL><p>\n</BODY>\n</HTML>`;
+	const html = `<!DOCTYPE NETSCAPE-Bookmark-file-1>\n<HTML>\n<BODY>\n<DL><p>\n    <DT><A HREF="https://google.com">Google</A>\n</DL><p>\n</BODY>\n</HTML>`;
 	const tree1 = BookmarksParser.parse(html);
 	const tree2 = BookmarksParser.parseFromHTMLString(html);
 	assertEquals(tree1.toJSON(), tree2.toJSON());
 });
 
 test("Parser.parseFromDOM works", () => {
-	const html = `<!DOCTYPE NETSCAPE-Bookmark-file-1>\n<HTML>\n<BODY>\n<DL><p>\n    <DT><A HREF=\"https://google.com\">Google</A>\n</DL><p>\n</BODY>\n</HTML>`;
+	const html = `<!DOCTYPE NETSCAPE-Bookmark-file-1>\n<HTML>\n<BODY>\n<DL><p>\n    <DT><A HREF="https://google.com">Google</A>\n</DL><p>\n</BODY>\n</HTML>`;
 	const dom = new DOMParser().parseFromString(html, "text/html");
 	const tree = BookmarksParser.parseFromDOM(dom);
 	assertInstanceOf(tree, BookmarksTree);
@@ -236,8 +230,7 @@ test("Parser.parseFromDOM works", () => {
 });
 
 test("Parser.parseFromJSONString and parseFromJSON", () => {
-	const json =
-		'{"Google":"https://google.com","Dev":{"GitHub":"https://github.com"}}';
+	const json = '{"Google":"https://google.com","Dev":{"GitHub":"https://github.com"}}';
 	const obj = {
 		Google: "https://google.com",
 		Dev: { GitHub: "https://github.com" },
@@ -250,7 +243,7 @@ test("Parser.parseFromJSONString and parseFromJSON", () => {
 	assertEquals(treeFromJSONString.get("Google"), "https://google.com");
 	assertEquals(
 		(treeFromJSONString.get("Dev") as BookmarksTree).get("GitHub"),
-		"https://github.com"
+		"https://github.com",
 	);
 });
 
