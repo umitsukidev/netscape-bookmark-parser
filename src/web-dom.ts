@@ -6,5 +6,3 @@
  */
 
 export const DOMParser = globalThis.DOMParser;
-export type Element = globalThis.Element;
-export type HTMLDocument = globalThis.HTMLDocument;

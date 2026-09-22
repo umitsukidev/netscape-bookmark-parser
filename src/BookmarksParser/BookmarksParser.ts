@@ -6,7 +6,7 @@
  */
 
 import { DOMParser } from "../dom.ts";
-import type { HTMLDocument } from "../dom.ts";
+import type { HTMLDocument } from "#dom-types";
 import { BookmarksTree } from "../BookmarksTree/index.ts";
 
 /**

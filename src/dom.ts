@@ -5,13 +5,7 @@
  * https://opensource.org/licenses/MIT
  */
 
-import type {
-	DOMParser as NodeDOMParser,
-	Element,
-	HTMLDocument,
-} from "@b-fuze/deno-dom";
-
-export type { Element, HTMLDocument };
+import type { DOMParser as NodeDOMParser } from "@b-fuze/deno-dom";
 
 // The Node entry point installs deno-dom before consumers call parser methods;
 // the browser entry point uses the native DOMParser already present globally.

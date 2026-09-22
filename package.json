@@ -18,6 +18,12 @@
 	},
 	"homepage": "https://github.com/umitsukidev/netscape-bookmark-parser#readme",
 	"type": "module",
+	"imports": {
+		"#dom-types": {
+			"browser": "./src/web-dom-types.ts",
+			"default": "./src/node-dom-types.ts"
+		}
+	},
 	"packageManager": "pnpm@12.4.2",
 	"engines": {
 		"node": ">=24 <25"

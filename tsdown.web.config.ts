@@ -1,4 +1,5 @@
 import { defineConfig } from "tsdown";
+import { resolve } from "node:path";
 
 export default defineConfig({
 	entry: {
@@ -14,9 +15,7 @@ export default defineConfig({
 	outDir: "./dist",
 	platform: "neutral",
 	tsconfig: "./tsconfig.web.json",
-	inputOptions: {
-		resolve: {
-			symlinks: false,
-		},
+	alias: {
+		[resolve("src/dom.ts")]: resolve("src/web-dom.ts"),
 	},
 });

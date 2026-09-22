@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "preserveSymlinks": true
+    "customConditions": ["browser"]
   },
-  "include": ["src/web.ts", "src/web/**/*.ts"]
+  "include": ["src/web.ts"]
 }
