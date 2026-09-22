@@ -5,8 +5,8 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { DOMParser } from "../deps.ts";
-import type { HTMLDocument } from "../deps.ts";
+import { DOMParser } from "../dom.ts";
+import type { HTMLDocument } from "../dom.ts";
 import { BookmarksTree } from "../BookmarksTree/index.ts";
 
 /**

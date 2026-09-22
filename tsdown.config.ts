@@ -2,11 +2,10 @@ import { defineConfig } from "tsdown";
 
 export default defineConfig({
 	entry: {
-		index: "./mod.ts",
+		index: "./src/index.ts",
 	},
 	format: ["esm"],
 	dts: true,
-	unbundle: true,
 	clean: true,
 	sourcemap: true,
 	outDir: "./dist",

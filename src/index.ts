@@ -1,0 +1,11 @@
+/**
+ * Copyright (c) 2025 grakeice
+ *
+ * This software is released under the MIT License.
+ * https://opensource.org/licenses/MIT
+ */
+
+import "./node-dom.ts";
+
+export { BookmarksTree } from "./BookmarksTree/index.ts";
+export { BookmarksParser } from "./BookmarksParser/index.ts";

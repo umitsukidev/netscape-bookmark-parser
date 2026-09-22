@@ -5,7 +5,7 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { DOMParser, type Element, type HTMLDocument } from "../deps.ts";
+import { DOMParser, type Element, type HTMLDocument } from "../dom.ts";
 
 /**
  * A class representing a bookmark tree in Netscape Bookmark format

@@ -5,9 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-// deno-lint-ignore ban-ts-comment
-// @ts-nocheck
-
 export const DOMParser = globalThis.DOMParser;
 export type Element = globalThis.Element;
 export type HTMLDocument = globalThis.HTMLDocument;

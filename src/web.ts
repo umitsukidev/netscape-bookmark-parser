@@ -5,5 +5,5 @@
  * https://opensource.org/licenses/MIT
  */
 
-export { BookmarksTree } from "./src/BookmarksTree/index.ts";
-export { BookmarksParser } from "./src/BookmarksParser/index.ts";
+export { BookmarksTree } from "./BookmarksTree/index.ts";
+export { BookmarksParser } from "./BookmarksParser/index.ts";

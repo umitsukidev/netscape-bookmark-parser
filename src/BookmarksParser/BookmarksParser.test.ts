@@ -8,7 +8,7 @@
 import { expect, test } from "vitest";
 import { BookmarksParser } from "./BookmarksParser.ts";
 import { BookmarksTree } from "../BookmarksTree/index.ts";
-import { DOMParser } from "../deps.ts";
+import { DOMParser } from "../dom.ts";
 
 const assertEquals = (actual: unknown, expected: unknown) =>
 	expect(actual).toEqual(expected);
