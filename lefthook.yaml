@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://json.schemastore.org/lefthook.json
+
+pre-commit:
+  parallel: true
+  commands:
+    oxc:
+      run: |
+        pnpm exec oxlint --fix --no-error-on-unmatched-pattern {staged_files} &&
+        pnpm exec oxfmt --no-error-on-unmatched-pattern {staged_files}
+      stage_fixed: true
+
+pre-push:
+  parallel: true
+  commands:
+    oxlint:
+      run: pnpm exec oxlint
+    oxfmt:
+      run: pnpm exec oxfmt --check

@@ -31,13 +31,10 @@ import { BookmarksParser, BookmarksTree } from "netscape-bookmark-parser";
 ### Deno
 
 ```typescript
-import {
-	BookmarksParser,
-	BookmarksTree,
-} from "jsr:@grakeice/netscape-bookmark-parser";
+import { BookmarksParser, BookmarksTree } from "jsr:@grakeice/netscape-bookmark-parser";
 ```
 
-> **注意:** JSR 版は Node.js/Deno ランタイムのみ対応です。ブラウザで利用する場合は npm パッケージをご利用ください。
+> **注意:** JSR 版は Node.js/Deno 用のエントリです。ブラウザでは npm の依存関係ゼロの `./web` エントリをご利用ください。
 
 ### ブラウザ
 
@@ -51,16 +48,16 @@ import { BookmarksParser, BookmarksTree } from "netscape-bookmark-parser/web";
 
 // 例: アップロードされたブックマークファイルの解析
 function handleFileUpload(event: Event) {
-	const file = (event.target as HTMLInputElement).files?.[0];
-	if (file) {
-		const reader = new FileReader();
-		reader.onload = (e) => {
-			const htmlContent = e.target?.result as string;
-			const bookmarksTree = BookmarksParser.parse(htmlContent);
-			console.log(bookmarksTree.toJSON());
-		};
-		reader.readAsText(file);
-	}
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const htmlContent = e.target?.result as string;
+            const bookmarksTree = BookmarksParser.parse(htmlContent);
+            console.log(bookmarksTree.toJSON());
+        };
+        reader.readAsText(file);
+    }
 }
 ```
 
@@ -68,15 +65,15 @@ function handleFileUpload(event: Event) {
 
 ```html
 <script type="importmap">
-	{
-		"imports": {
-			"netscape-bookmark-parser/web": "https://cdn.jsdelivr.net/npm/netscape-bookmark-parser@1.1.4/esm/mod_web.js"
-		}
-	}
+    {
+        "imports": {
+            "netscape-bookmark-parser/web": "https://cdn.jsdelivr.net/npm/netscape-bookmark-parser@1.1.4/dist/web.js"
+        }
+    }
 </script>
 <script type="module">
-	import { BookmarksParser, BookmarksTree } from "netscape-bookmark-parser/web";
-	const tree = BookmarksParser.parse(htmlContent);
+    import { BookmarksParser, BookmarksTree } from "netscape-bookmark-parser/web";
+    const tree = BookmarksParser.parse(htmlContent);
 </script>
 ```
 
@@ -84,14 +81,14 @@ function handleFileUpload(event: Event) {
 
 ```html
 <script type="module">
-	import {
-		BookmarksParser,
-		BookmarksTree,
-	} from "https://cdn.jsdelivr.net/npm/netscape-bookmark-parser@1.1.4/esm/mod_web.js";
+    import {
+        BookmarksParser,
+        BookmarksTree,
+    } from "https://cdn.jsdelivr.net/npm/netscape-bookmark-parser@1.1.4/dist/web.js";
 </script>
 ```
 
-> **ブラウザサポート:** ブラウザ互換は npm パッケージ経由のみ。JSR パッケージには web 最適化版は含まれません。
+> **ブラウザサポート:** web 最適化版は npm の `./web` エントリから利用できます。ネイティブブラウザ API を使用し、DOM ライブラリへの依存はありません。
 
 > **注意:** web 最適化版は DOMParser 等のネイティブ API を利用し、Node.js 用ポリフィルを含まないため、ブラウザで軽量かつ高速です。
 
@@ -199,12 +196,12 @@ console.log(devFolder.get("GitHub")); // "https://github.com"
 
 ### Web 最適化版
 
-> **重要:** ブラウザサポートは npm インストールのみ。JSR 版にはブラウザ互換ビルドは含まれません。
+> **重要:** ブラウザサポートは npm の `./web` エントリから利用できます。
 
 このライブラリは Node.js 依存を排除し、ネイティブブラウザ API を利用する web 最適化版を提供します:
 
 ```typescript
-// npmのみで利用可能なweb最適化版
+// web最適化版
 import { BookmarksParser, BookmarksTree } from "netscape-bookmark-parser/web";
 ```
 
@@ -216,49 +213,49 @@ import { BookmarksParser, BookmarksTree } from "netscape-bookmark-parser/web";
 
 - [`static parse(htmlString: string): BookmarksTree`](#static-parsehtmlstring-string-bookmarkstree)
 
-  - Netscape Bookmark 形式の HTML 文字列を解析し、`BookmarksTree`を返します。
-  - [`parseFromHTMLString`](#static-parsefromhtmlstringhtmlstring-string-bookmarkstree)のエイリアス。
+    - Netscape Bookmark 形式の HTML 文字列を解析し、`BookmarksTree`を返します。
+    - [`parseFromHTMLString`](#static-parsefromhtmlstringhtmlstring-string-bookmarkstree)のエイリアス。
 
-  **例:**
+    **例:**
 
-  ```typescript
-  const html = `<!DOCTYPE NETSCAPE-Bookmark-file-1>\n<HTML><BODY><DL><p>\n  <DT><A HREF=\"https://example.com\">Example</A>\n</DL><p></BODY></HTML>`;
-  const tree = BookmarksParser.parse(html);
-  console.log(tree.toJSON());
-  ```
+    ```typescript
+    const html = `<!DOCTYPE NETSCAPE-Bookmark-file-1>\n<HTML><BODY><DL><p>\n  <DT><A HREF=\"https://example.com\">Example</A>\n</DL><p></BODY></HTML>`;
+    const tree = BookmarksParser.parse(html);
+    console.log(tree.toJSON());
+    ```
 
 - [`static parseFromHTMLString(htmlString: string): BookmarksTree`](#static-parsefromhtmlstringhtmlstring-string-bookmarkstree)
 
-  - HTML 文字列を解析し、`BookmarksTree`を返します。
+    - HTML 文字列を解析し、`BookmarksTree`を返します。
 
-  **例:**
+    **例:**
 
-  ```typescript
-  const html = `<!DOCTYPE NETSCAPE-Bookmark-file-1>...`;
-  const tree = BookmarksParser.parseFromHTMLString(html);
-  ```
+    ```typescript
+    const html = `<!DOCTYPE NETSCAPE-Bookmark-file-1>...`;
+    const tree = BookmarksParser.parseFromHTMLString(html);
+    ```
 
 - [`static parseFromDOM(dom: HTMLDocument): BookmarksTree`](#static-parsefromdomdom-htmldocument-bookmarkstree)
 
-  - 既存の`HTMLDocument`から`BookmarksTree`を生成します。
+    - 既存の`HTMLDocument`から`BookmarksTree`を生成します。
 
-  **例:**
+    **例:**
 
-  ```typescript
-  const dom = new DOMParser().parseFromString(html, "text/html");
-  const tree = BookmarksParser.parseFromDOM(dom);
-  ```
+    ```typescript
+    const dom = new DOMParser().parseFromString(html, "text/html");
+    const tree = BookmarksParser.parseFromDOM(dom);
+    ```
 
 - [`static parseFromJSON(jsonString: string): BookmarksTree`](#static-parsefromjsonjsonstring-string-bookmarkstree)
 
-  - JSON 文字列を解析し、`BookmarksTree`を返します。
+    - JSON 文字列を解析し、`BookmarksTree`を返します。
 
-  **例:**
+    **例:**
 
-  ```typescript
-  const json = '{"Google": "https://google.com"}';
-  const tree = BookmarksParser.parseFromJSON(json);
-  ```
+    ```typescript
+    const json = '{"Google": "https://google.com"}';
+    const tree = BookmarksParser.parseFromJSON(json);
+    ```
 
 ---
 
@@ -270,73 +267,73 @@ import { BookmarksParser, BookmarksTree } from "netscape-bookmark-parser/web";
 
 - [`new BookmarksTree()`](#constructor)
 
-  **例:**
+    **例:**
 
-  ```typescript
-  const tree = new BookmarksTree();
-  tree.set("Google", "https://google.com");
-  ```
+    ```typescript
+    const tree = new BookmarksTree();
+    tree.set("Google", "https://google.com");
+    ```
 
 #### インスタンスメソッド
 
 - [`toJSON(): Record<string, unknown>`](#tojson-recordstring-unknown)
 
-  - ツリーを JSON オブジェクトに変換します。
+    - ツリーを JSON オブジェクトに変換します。
 
-  **例:**
+    **例:**
 
-  ```typescript
-  const json = tree.toJSON();
-  console.log(json);
-  ```
+    ```typescript
+    const json = tree.toJSON();
+    console.log(json);
+    ```
 
 - [`toDOM(): HTMLDocument`](#todom-htmldocument)
 
-  - ツリーを Netscape Bookmark 形式の HTML ドキュメントに変換します。
+    - ツリーを Netscape Bookmark 形式の HTML ドキュメントに変換します。
 
-  **例:**
+    **例:**
 
-  ```typescript
-  const dom = tree.toDOM();
-  ```
+    ```typescript
+    const dom = tree.toDOM();
+    ```
 
 - [`get HTMLString(): string`](#get-htmlstring-string)
 
-  - Netscape Bookmark 形式の完全な HTML 文字列を取得します。
+    - Netscape Bookmark 形式の完全な HTML 文字列を取得します。
 
-  **例:**
+    **例:**
 
-  ```typescript
-  const html = tree.HTMLString;
-  console.log(html);
-  ```
+    ```typescript
+    const html = tree.HTMLString;
+    console.log(html);
+    ```
 
 - [`get HTMLText(): string`](#get-htmltext-string)
-  - `HTMLString`のエイリアス（非推奨）。
+    - `HTMLString`のエイリアス（非推奨）。
 
 #### 静的メソッド
 
 - [`static fromJSON(json: Record<string, unknown>): BookmarksTree`](#static-fromjsonjson-recordstring-unknown-bookmarkstree)
 
-  - JSON オブジェクトからツリーを生成します。
+    - JSON オブジェクトからツリーを生成します。
 
-  **例:**
+    **例:**
 
-  ```typescript
-  const json = { Google: "https://google.com" };
-  const tree = BookmarksTree.fromJSON(json);
-  ```
+    ```typescript
+    const json = { Google: "https://google.com" };
+    const tree = BookmarksTree.fromJSON(json);
+    ```
 
 - [`static fromDOM(dom: HTMLDocument): BookmarksTree`](#static-fromdomdom-htmldocument-bookmarkstree)
 
-  - HTML ドキュメントからツリーを生成します。
+    - HTML ドキュメントからツリーを生成します。
 
-  **例:**
+    **例:**
 
-  ```typescript
-  const dom = new DOMParser().parseFromString(html, "text/html");
-  const tree = BookmarksTree.fromDOM(dom);
-  ```
+    ```typescript
+    const dom = new DOMParser().parseFromString(html, "text/html");
+    const tree = BookmarksTree.fromDOM(dom);
+    ```
 
 ## プロジェクト構成
 
@@ -351,15 +348,27 @@ src/
     ├── BookmarksParser.test.ts # パーサーテスト
     └── index.ts             # エクスポート定義
 scripts/
-└── build_npm.ts             # NPMビルドスクリプト
+└── sync-jsr-version.mjs     # package.jsonとJSRバージョンの同期
 .github/
 └── workflows/
-    └── release.yml          # CI/CDパイプライン
-npm/                         # Node.jsビルド成果物
-├── esm/                     # ESモジュール
-├── package.json
-└── README.md
+    ├── changesets.yml        # ChangesetsによるバージョンPR
+    ├── ci.yml                # テスト・型検査・ビルド
+    └── release.yml           # NPM/JSR公開とGitHub Release
+dist/                        # 生成されるパッケージファイル（コミット対象外）
 ```
+
+## 開発とリリース
+
+pnpmで依存関係をインストールし、ローカル検証を実行します。
+
+```bash
+pnpm install
+pnpm test
+pnpm typecheck
+pnpm build
+```
+
+ユーザー向け変更には `pnpm changeset` でリリースノートを追加します。`main` へのpushでChangesetsがバージョンPRを作成し、マージ時に `package.json` の変更と `jsr.json` のバージョン同期が行われます。その後の `main` へのpushでNPM/JSRへ公開し、対応する `v<version>` GitタグとGitHub Releaseを作成します。
 
 ## サポート形式
 
@@ -472,7 +481,7 @@ MIT License - 詳細は[LICENSE](LICENSE)を参照してください。
 ### v1.1.0
 
 - 🌐 **ブラウザサポート**: ブラウザ用 web 最適化版を追加
-- 📦 **デュアルエントリーポイント**: Node.js/Deno 用（`./mod.ts`）とブラウザ用（`./mod_web.ts`）を分離
+- 📦 **デュアルエントリーポイント**: Node.js/Deno 用（`src/index.ts`）とブラウザ用（`src/web.ts`）を分離
 - ⚡ **ネイティブ DOM API**: ブラウザ版は DOMParser 等のネイティブ API で高速化
 - 🔧 **ビルド最適化**: ポリフィル除去等によるビルド強化
 - 📚 **ドキュメント更新**: ブラウザ利用例・API リファレンス追加

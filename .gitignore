@@ -8,7 +8,7 @@
 /.idea/
 /.vscode/
 
-/node_modules
+/node_modules/
 
 .env
 *.orig
@@ -106,7 +106,7 @@ out
 
 # Nuxt.js build / generate output
 .nuxt
-dist
+dist/
 
 # Gatsby files
 .cache/
@@ -144,6 +144,10 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# pnpm
+.pnpm-store/
+pnpm-debug.log*
 
 ### Node Patch ###
 # Serverless Webpack directories

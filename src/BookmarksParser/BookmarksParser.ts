@@ -1,12 +1,12 @@
 /**
- * Copyright (c) 2025 grakeice
+ * Copyright (c) 2025-2026 kurage(@umitsukidev)
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
 
-import { DOMParser } from "../deps.ts";
-import type { HTMLDocument } from "../deps.ts";
+import { DOMParser } from "../dom.ts";
+import type { HTMLDocument } from "#dom-types";
 import { BookmarksTree } from "../BookmarksTree/index.ts";
 
 /**

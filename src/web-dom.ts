@@ -5,4 +5,4 @@
  * https://opensource.org/licenses/MIT
  */
 
-export { BookmarksTree } from "./BookmarksTree.ts";
+export const DOMParser = globalThis.DOMParser;

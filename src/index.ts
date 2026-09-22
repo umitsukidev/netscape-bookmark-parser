@@ -5,4 +5,7 @@
  * https://opensource.org/licenses/MIT
  */
 
-export { BookmarksTree } from "./BookmarksTree.ts";
+import "./node-dom.ts";
+
+export { BookmarksTree } from "./BookmarksTree/index.ts";
+export { BookmarksParser } from "./BookmarksParser/index.ts";

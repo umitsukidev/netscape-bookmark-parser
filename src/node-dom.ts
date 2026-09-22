@@ -5,4 +5,7 @@
  * https://opensource.org/licenses/MIT
  */
 
-export { BookmarksTree } from "./BookmarksTree.ts";
+import { DOMParser as NodeDOMParser } from "@b-fuze/deno-dom";
+import { setDOMParser } from "./dom.ts";
+
+setDOMParser(NodeDOMParser);
