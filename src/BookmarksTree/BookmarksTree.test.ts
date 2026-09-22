@@ -5,11 +5,18 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { assertEquals, assertInstanceOf } from "@std/assert";
+import { expect, test } from "vitest";
 import { DOMParser } from "@b-fuze/deno-dom";
 import { BookmarksTree } from "./BookmarksTree.ts";
 
-Deno.test("BookmarksTree - 基本的な操作", () => {
+const assertEquals = (actual: unknown, expected: unknown) =>
+	expect(actual).toEqual(expected);
+const assertInstanceOf = (
+	actual: unknown,
+	expected: abstract new (...args: any[]) => any,
+) => expect(actual).toBeInstanceOf(expected);
+
+test("BookmarksTree - 基本的な操作", () => {
 	const tree = new BookmarksTree();
 
 	// ブックマークの追加
@@ -21,7 +28,7 @@ Deno.test("BookmarksTree - 基本的な操作", () => {
 	assertEquals(tree.size, 2);
 });
 
-Deno.test("BookmarksTree - フォルダの作成と階層構造", () => {
+test("BookmarksTree - フォルダの作成と階層構造", () => {
 	const tree = new BookmarksTree();
 	const devFolder = new BookmarksTree();
 
@@ -38,7 +45,7 @@ Deno.test("BookmarksTree - フォルダの作成と階層構造", () => {
 	assertEquals(folder.get("Stack Overflow"), "https://stackoverflow.com");
 });
 
-Deno.test("BookmarksTree - toJSON()", () => {
+test("BookmarksTree - toJSON()", () => {
 	const tree = new BookmarksTree();
 	const devFolder = new BookmarksTree();
 
@@ -58,7 +65,7 @@ Deno.test("BookmarksTree - toJSON()", () => {
 	});
 });
 
-Deno.test("BookmarksTree - fromJSON()", () => {
+test("BookmarksTree - fromJSON()", () => {
 	const json = {
 		Development: {
 			MDN: "https://developer.mozilla.org",
@@ -77,12 +84,12 @@ Deno.test("BookmarksTree - fromJSON()", () => {
 	assertEquals(devFolder.get("Stack Overflow"), "https://stackoverflow.com");
 });
 
-Deno.test("BookmarksTree - fromJSON() 空のオブジェクト", () => {
+test("BookmarksTree - fromJSON() 空のオブジェクト", () => {
 	const tree = BookmarksTree.fromJSON({});
 	assertEquals(tree.size, 0);
 });
 
-Deno.test("BookmarksTree - fromJSON() nullと非オブジェクト値の処理", () => {
+test("BookmarksTree - fromJSON() nullと非オブジェクト値の処理", () => {
 	const json = {
 		validLink: "https://example.com",
 		nullValue: null,
@@ -102,7 +109,7 @@ Deno.test("BookmarksTree - fromJSON() nullと非オブジェクト値の処理",
 	assertInstanceOf(tree.get("validFolder"), BookmarksTree);
 });
 
-Deno.test("BookmarksTree - fromDOM() 基本的なHTML解析", () => {
+test("BookmarksTree - fromDOM() 基本的なHTML解析", () => {
 	const htmlContent = `<!DOCTYPE NETSCAPE-Bookmark-file-1>
 <HTML>
 <BODY>
@@ -123,7 +130,7 @@ Deno.test("BookmarksTree - fromDOM() 基本的なHTML解析", () => {
 	assertEquals(folder.get("Example"), "https://example.com");
 });
 
-Deno.test("BookmarksTree - fromDOM() 複雑な階層構造", () => {
+test("BookmarksTree - fromDOM() 複雑な階層構造", () => {
 	const htmlContent = `<!DOCTYPE NETSCAPE-Bookmark-file-1>
 <HTML>
 <BODY>
@@ -155,7 +162,7 @@ Deno.test("BookmarksTree - fromDOM() 複雑な階層構造", () => {
 	assertEquals(toolsFolder.get("Stack Overflow"), "https://stackoverflow.com");
 });
 
-Deno.test("BookmarksTree - toDOM() 基本的なHTML生成", () => {
+test("BookmarksTree - toDOM() 基本的なHTML生成", () => {
 	const tree = new BookmarksTree();
 	const devFolder = new BookmarksTree();
 
@@ -181,7 +188,7 @@ Deno.test("BookmarksTree - toDOM() 基本的なHTML生成", () => {
 	assertEquals(folderH3?.textContent, "Development");
 });
 
-Deno.test("BookmarksTree - toDOM() 複雑な階層構造", () => {
+test("BookmarksTree - toDOM() 複雑な階層構造", () => {
 	const tree = new BookmarksTree();
 	const devFolder = new BookmarksTree();
 	const toolsFolder = new BookmarksTree();
@@ -216,7 +223,7 @@ Deno.test("BookmarksTree - toDOM() 複雑な階層構造", () => {
 	assertEquals(folderNames.includes("Tools"), true);
 });
 
-Deno.test("BookmarksTree - JSON-DOM双方向変換の整合性", () => {
+test("BookmarksTree - JSON-DOM双方向変換の整合性", () => {
 	const originalJson = {
 		Development: {
 			MDN: "https://developer.mozilla.org",
@@ -236,7 +243,7 @@ Deno.test("BookmarksTree - JSON-DOM双方向変換の整合性", () => {
 	assertEquals(resultJson, originalJson);
 });
 
-Deno.test("BookmarksTree - 空のツリーの処理", () => {
+test("BookmarksTree - 空のツリーの処理", () => {
 	const tree = new BookmarksTree();
 
 	assertEquals(tree.toJSON(), {});
@@ -250,7 +257,7 @@ Deno.test("BookmarksTree - 空のツリーの処理", () => {
 	assertEquals(dlElement !== null, true);
 });
 
-Deno.test("BookmarksTree - エラーハンドリング: 無効なHTML", () => {
+test("BookmarksTree - エラーハンドリング: 無効なHTML", () => {
 	const invalidHtml = `<html><body><p>Invalid bookmark file</p></body></html>`;
 	const dom = new DOMParser().parseFromString(invalidHtml, "text/html");
 	const tree = BookmarksTree.fromDOM(dom);
@@ -258,7 +265,7 @@ Deno.test("BookmarksTree - エラーハンドリング: 無効なHTML", () => {
 	assertEquals(tree.size, 0);
 });
 
-Deno.test("BookmarksTree - エラーハンドリング: 空のHTML", () => {
+test("BookmarksTree - エラーハンドリング: 空のHTML", () => {
 	const emptyHtml = ``;
 	const dom = new DOMParser().parseFromString(emptyHtml, "text/html");
 	const tree = BookmarksTree.fromDOM(dom);
@@ -266,7 +273,7 @@ Deno.test("BookmarksTree - エラーハンドリング: 空のHTML", () => {
 	assertEquals(tree.size, 0);
 });
 
-Deno.test("BookmarksTree - 特殊文字のエスケープ処理", () => {
+test("BookmarksTree - 特殊文字のエスケープ処理", () => {
 	const tree = new BookmarksTree();
 	tree.set("Test & Example", "https://example.com/?q=hello&world");
 	tree.set('Quote "Test"', "https://test.com");
@@ -292,7 +299,7 @@ Deno.test("BookmarksTree - 特殊文字のエスケープ処理", () => {
 	);
 });
 
-Deno.test("BookmarksTree - 大きな階層構造の処理", () => {
+test("BookmarksTree - 大きな階層構造の処理", () => {
 	const tree = new BookmarksTree();
 
 	// 5レベルの深い階層を作成
@@ -322,7 +329,7 @@ Deno.test("BookmarksTree - 大きな階層構造の処理", () => {
 	assertEquals(level.get("Deep Link"), "https://deep.com");
 });
 
-Deno.test("BookmarksTree - 空のフォルダの処理", () => {
+test("BookmarksTree - 空のフォルダの処理", () => {
 	const tree = new BookmarksTree();
 	const emptyFolder = new BookmarksTree();
 
@@ -343,7 +350,7 @@ Deno.test("BookmarksTree - 空のフォルダの処理", () => {
 	assertEquals(emptyFolderH3?.textContent, "Empty Folder");
 });
 
-Deno.test("BookmarksTree - 重複するキーの処理", () => {
+test("BookmarksTree - 重複するキーの処理", () => {
 	const tree = new BookmarksTree();
 
 	// 同じキーで異なる値を設定
@@ -364,7 +371,7 @@ Deno.test("BookmarksTree - 重複するキーの処理", () => {
 	assertInstanceOf(tree.get("Same Key"), BookmarksTree);
 });
 
-Deno.test("BookmarksTree - URLの妥当性チェック", () => {
+test("BookmarksTree - URLの妥当性チェック", () => {
 	const tree = new BookmarksTree();
 
 	// 様々な形式のURLを追加
@@ -382,7 +389,7 @@ Deno.test("BookmarksTree - URLの妥当性チェック", () => {
 	assertEquals(tree.get("Fragment"), "https://example.com#section");
 });
 
-Deno.test("BookmarksTree - 国際化ドメイン名の処理", () => {
+test("BookmarksTree - 国際化ドメイン名の処理", () => {
 	const tree = new BookmarksTree();
 
 	tree.set("日本語サイト", "https://日本.jp");
@@ -400,7 +407,7 @@ Deno.test("BookmarksTree - 国際化ドメイン名の処理", () => {
 	assertEquals(reconstructed.get("日本語サイト"), "https://日本.jp");
 });
 
-Deno.test("BookmarksTree - メモリ効率性テスト", () => {
+test("BookmarksTree - メモリ効率性テスト", () => {
 	const tree = new BookmarksTree();
 
 	// 大量のブックマークを追加
@@ -421,7 +428,7 @@ Deno.test("BookmarksTree - メモリ効率性テスト", () => {
 	assertEquals(Object.keys(json).length, 1000);
 });
 
-Deno.test("BookmarksTree - イテレータの動作確認", () => {
+test("BookmarksTree - イテレータの動作確認", () => {
 	const tree = new BookmarksTree();
 	const folder = new BookmarksTree();
 
@@ -453,7 +460,7 @@ Deno.test("BookmarksTree - イテレータの動作確認", () => {
 	assertEquals(tree.has("Link 1"), false);
 });
 
-Deno.test("BookmarksTree - 循環参照の防止", () => {
+test("BookmarksTree - 循環参照の防止", () => {
 	const tree = new BookmarksTree();
 	const folder1 = new BookmarksTree();
 	const folder2 = new BookmarksTree();
@@ -473,7 +480,7 @@ Deno.test("BookmarksTree - 循環参照の防止", () => {
 	assertEquals(nestedFolder["Link"], "https://example.com");
 });
 
-Deno.test(
+test(
 	"BookmarksTree - HTMLString/HTMLText getter returns same value",
 	() => {
 		const tree = new BookmarksTree();
@@ -490,7 +497,7 @@ Deno.test(
 	}
 );
 
-Deno.test("BookmarksTree - HTMLText is deprecated alias for HTMLString", () => {
+test("BookmarksTree - HTMLText is deprecated alias for HTMLString", () => {
 	const tree = new BookmarksTree();
 	tree.set("Test", "https://test.com");
 	assertEquals(tree.HTMLText, tree.HTMLString);

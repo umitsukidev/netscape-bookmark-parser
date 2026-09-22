@@ -1,0 +1,76 @@
+{
+	"name": "netscape-bookmark-parser",
+	"version": "1.1.4",
+	"description": "Parse Netscape bookmark HTML files and manipulate them as structured data.",
+	"keywords": [
+		"bookmark",
+		"parser",
+		"netscape"
+	],
+	"author": "grakeice",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/umitsukidev/netscape-bookmark-parser.git"
+	},
+	"bugs": {
+		"url": "https://github.com/umitsukidev/netscape-bookmark-parser/issues"
+	},
+	"homepage": "https://github.com/umitsukidev/netscape-bookmark-parser#readme",
+	"type": "module",
+	"packageManager": "pnpm@12.4.2",
+	"engines": {
+		"node": ">=24"
+	},
+	"devEngines": {
+		"runtime": {
+			"name": "node",
+			"version": ">=24",
+			"onFail": "warn"
+		},
+		"packageManager": {
+			"name": "pnpm",
+			"version": "12.4.2",
+			"onFail": "error"
+		}
+	},
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
+		},
+		"./web": {
+			"types": "./dist/web.d.ts",
+			"import": "./dist/web.js"
+		}
+	},
+	"files": [
+		"dist",
+		"LICENSE",
+		"README.md",
+		"README-ja.md"
+	],
+	"scripts": {
+		"build": "tsdown --config tsdown.config.ts && tsdown --config tsdown.web.config.ts",
+		"typecheck": "tsc --noEmit",
+		"test": "vitest run",
+		"test:watch": "vitest",
+		"changeset": "changeset",
+		"version-packages": "changeset version && pnpm sync:jsr-version",
+		"sync:jsr-version": "node scripts/sync-jsr-version.mjs"
+	},
+	"publishConfig": {
+		"access": "public",
+		"provenance": true
+	},
+	"dependencies": {
+		"@b-fuze/deno-dom": "jsr:@b-fuze/deno-dom@^0.1.49"
+	},
+	"devDependencies": {
+		"@changesets/cli": "^2.29.5",
+		"@types/node": "^24.0.0",
+		"tsdown": "^0.15.0",
+		"typescript": "^5.9.0",
+		"vitest": "^3.2.4"
+	}
+}
