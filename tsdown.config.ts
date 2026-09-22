@@ -1,4 +1,5 @@
 import { defineConfig } from "tsdown";
+import { readFileSync } from "node:fs";
 
 export default defineConfig({
 	entry: {
@@ -10,5 +11,18 @@ export default defineConfig({
 	sourcemap: true,
 	outDir: "./dist",
 	platform: "neutral",
-	external: ["@b-fuze/deno-dom"],
+	plugins: [
+		{
+			name: "wasm-binary-loader",
+			load(id: string) {
+				if (id.endsWith(".wasm")) {
+					const buffer = readFileSync(id);
+					return `
+const wasmBinary = new Uint8Array([${Array.from(buffer).join(",")}]);
+export default wasmBinary;
+`;
+				}
+			},
+		},
+	],
 });

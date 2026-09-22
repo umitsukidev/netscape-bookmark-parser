@@ -48,10 +48,9 @@
 		"access": "public",
 		"provenance": true
 	},
-	"dependencies": {
-		"@b-fuze/deno-dom": "jsr:@b-fuze/deno-dom@^0.1.49"
-	},
+	"dependencies": {},
 	"devDependencies": {
+		"@b-fuze/deno-dom": "jsr:@b-fuze/deno-dom@^0.1.49",
 		"@changesets/cli": "^2.29.5",
 		"@types/node": "^24.0.0",
 		"tsdown": "^0.15.0",
