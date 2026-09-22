@@ -12,6 +12,6 @@
 			"README-ja.md",
 			"LICENSE"
 		],
-		"exclude": ["**/*.test.ts", "src/web.ts", "src/web-dom.ts"]
+		"exclude": ["**/*.test.ts", "src/web.ts", "src/web/**"]
 	}
 }
