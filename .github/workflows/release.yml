@@ -91,7 +91,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Publish to JSR
-        run: pnpm dlx jsr publish --provenance
+        run: pnpm dlx jsr publish
       - name: Create GitHub release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
