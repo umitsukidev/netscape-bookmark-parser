@@ -25,25 +25,19 @@ jobs:
       - name: Check for a new version
         id: version
         shell: bash
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
           version="$(node -p "require('./package.json').version")"
           tag="v${version}"
           sha="$(git rev-parse HEAD)"
           tag_exists=false
-          release_exists=false
           if git rev-parse --verify "refs/tags/${tag}" >/dev/null 2>&1; then
             tag_exists=true
           fi
-          if gh release view "${tag}" >/dev/null 2>&1; then
-            release_exists=true
-          fi
 
           should_release=false
-          if [ "$release_exists" = false ]; then
-            if [ "$tag_exists" = true ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          if [ "$tag_exists" = false ]; then
+            if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
               should_release=true
             elif git rev-parse HEAD^ >/dev/null 2>&1 && git cat-file -e HEAD^:package.json 2>/dev/null; then
               previous_version="$(git show HEAD^:package.json | node -e 'let data=""; process.stdin.on("data", chunk => data += chunk).on("end", () => process.stdout.write(JSON.parse(data).version));')"
@@ -98,12 +92,8 @@ jobs:
         if: steps.version.outputs.should_release == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          if gh release view "${{ steps.version.outputs.tag }}" >/dev/null 2>&1; then
-            echo "GitHub release ${{ steps.version.outputs.tag }} already exists"
-          else
-            gh release create "${{ steps.version.outputs.tag }}" \
-              --target "${{ steps.version.outputs.sha }}" \
-              --title "${{ steps.version.outputs.tag }}" \
-              --generate-notes
-          fi
+        run: >-
+          gh release create "${{ steps.version.outputs.tag }}"
+          --target "${{ steps.version.outputs.sha }}"
+          --title "${{ steps.version.outputs.tag }}"
+          --generate-notes

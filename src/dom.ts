@@ -5,12 +5,10 @@
  * https://opensource.org/licenses/MIT
  */
 
-import type { DOMParser as NodeDOMParser } from "@b-fuze/deno-dom";
+type DOMParserType = typeof globalThis.DOMParser;
 
-// The Node entry point installs deno-dom before consumers call parser methods;
-// the browser entry point uses the native DOMParser already present globally.
-export let DOMParser: typeof NodeDOMParser = globalThis.DOMParser as unknown as typeof NodeDOMParser;
+export let DOMParser: DOMParserType = globalThis.DOMParser;
 
-export const setDOMParser = (parser: typeof NodeDOMParser): void => {
+export const setDOMParser = (parser: DOMParserType): void => {
 	DOMParser = parser;
 };

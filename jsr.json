@@ -1,9 +1,12 @@
 {
-	"$schema": "https://jsr.io/schema/jsr.json",
+	"$schema": "https://jsr.io/schema/config-file.v1.json",
 	"name": "@grakeice/netscape-bookmark-parser",
 	"version": "1.1.4",
 	"exports": {
 		".": "./src/index.ts"
+	},
+	"imports": {
+		"#dom-types": "./src/node-dom-types.ts"
 	},
 	"publish": {
 		"include": [
