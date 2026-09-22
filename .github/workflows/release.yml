@@ -69,12 +69,22 @@ jobs:
         run: pnpm build
       - name: Publish to NPM
         if: steps.version.outputs.should_release == 'true'
-        run: pnpm publish --no-git-checks --provenance --access public
+        run: |
+          if npm view "netscape-bookmark-parser@${{ steps.version.outputs.version }}" version --silent >/dev/null 2>&1; then
+            echo "NPM version ${{ steps.version.outputs.version }} is already published"
+          else
+            pnpm publish --no-git-checks --provenance --access public
+          fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Publish to JSR
         if: steps.version.outputs.should_release == 'true'
-        run: pnpm dlx jsr publish --provenance
+        run: |
+          if pnpm dlx jsr info "@grakeice/netscape-bookmark-parser@${{ steps.version.outputs.version }}" >/dev/null 2>&1; then
+            echo "JSR version ${{ steps.version.outputs.version }} is already published"
+          else
+            pnpm dlx jsr publish --provenance
+          fi
       - name: Create Git tag
         if: steps.version.outputs.should_release == 'true'
         run: |
