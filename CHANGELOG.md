@@ -1,5 +1,11 @@
 # netscape-bookmark-parser
 
+## 1.2.3
+
+### Patch Changes
+
+- 1a2594e: Unify JSR dependency in package.json, ensure bundling with alwaysBundle, and gate release workflows behind CI success.
+
 ## 1.2.2
 
 ### Patch Changes
