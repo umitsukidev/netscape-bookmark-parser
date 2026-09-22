@@ -10,17 +10,7 @@
 		"#dom-types": "./src/node-dom-types.ts"
 	},
 	"publish": {
-		"include": [
-			"src/**/*.ts",
-			"README.md",
-			"README-ja.md",
-			"LICENSE"
-		],
-		"exclude": [
-			"**/*.test.ts",
-			"src/web.ts",
-			"src/web-dom.ts",
-			"src/web-dom-types.ts"
-		]
+		"include": ["src/**/*.ts", "README.md", "README-ja.md", "LICENSE"],
+		"exclude": ["**/*.test.ts", "src/web.ts", "src/web-dom.ts", "src/web-dom-types.ts"]
 	}
 }
