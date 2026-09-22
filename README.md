@@ -37,7 +37,7 @@ import {
 } from "jsr:@grakeice/netscape-bookmark-parser";
 ```
 
-> **Note:** The JSR version only includes the Node.js/Deno runtime. For browser support, please use the npm package.
+> **Note:** The JSR package provides the Node.js/Deno entry. For browser support, use the npm package's dependency-free `./web` entry.
 
 ### Browser
 
@@ -70,7 +70,7 @@ function handleFileUpload(event: Event) {
 <script type="importmap">
 	{
 		"imports": {
-			"netscape-bookmark-parser/web": "https://cdn.jsdelivr.net/npm/netscape-bookmark-parser@1.1.4/esm/mod_web.js"
+			"netscape-bookmark-parser/web": "https://cdn.jsdelivr.net/npm/netscape-bookmark-parser@1.1.4/dist/web.js"
 		}
 	}
 </script>
@@ -87,11 +87,11 @@ function handleFileUpload(event: Event) {
 	import {
 		BookmarksParser,
 		BookmarksTree,
-	} from "https://cdn.jsdelivr.net/npm/netscape-bookmark-parser@1.1.4/esm/mod_web.js";
+	} from "https://cdn.jsdelivr.net/npm/netscape-bookmark-parser@1.1.4/dist/web.js";
 </script>
 ```
 
-> **Browser Support:** Browser compatibility is only available through the npm package. The JSR package does not include the web-optimized version due to platform-specific dependencies.
+> **Browser Support:** The web-optimized version is available from the npm `./web` export. It uses native browser APIs and has no DOM library dependency.
 
 > **Note:** The web-optimized version uses native browser APIs (DOMParser, etc.) and does not include Node.js polyfills, making it lighter and faster in browser environments.
 
@@ -200,12 +200,12 @@ console.log(devFolder.get("GitHub")); // "https://github.com"
 
 ### Web-Optimized Version
 
-> **Important:** Browser support is only available via npm installation. JSR version does not include browser-compatible builds.
+> **Important:** Browser support is available from the npm `./web` export.
 
 The library provides a browser-optimized version that eliminates Node.js dependencies and uses native browser APIs:
 
 ```typescript
-// Import browser-optimized version (npm only)
+// Import the browser-optimized version
 import { BookmarksParser, BookmarksTree } from "netscape-bookmark-parser/web";
 ```
 
@@ -354,15 +354,27 @@ src/
     ├── BookmarksParser.test.ts # Parser tests
     └── index.ts             # Export definitions
 scripts/
-└── build_npm.ts             # NPM build script
+└── sync-jsr-version.mjs     # Keep JSR version in sync with package.json
 .github/
 └── workflows/
-    └── release.yml          # CI/CD pipeline
-npm/                         # Node.js build artifacts
-├── esm/                     # ES modules
-├── package.json
-└── README.md
+    ├── changesets.yml        # Changesets version pull requests
+    ├── ci.yml                # Test, typecheck, and build checks
+    └── release.yml           # NPM/JSR publishing and GitHub releases
+dist/                        # Generated package files (not committed)
 ```
+
+## Development and Release
+
+Install dependencies with pnpm and run the local checks:
+
+```bash
+pnpm install
+pnpm test
+pnpm typecheck
+pnpm build
+```
+
+Create a release note with `pnpm changeset`. Changesets opens a version pull request on `main`; merging it updates `package.json` and synchronizes the JSR version in `jsr.json`. A subsequent `main` push publishes the package to NPM and JSR and creates the matching `v<version>` Git tag and GitHub release.
 
 ## Supported Formats
 
@@ -475,7 +487,7 @@ MIT License - See [LICENSE](LICENSE) file for details.
 ### v1.1.0
 
 - 🌐 **Browser Support**: Added web-optimized version for browser environments
-- 📦 **Dual Entry Points**: Separate builds for Node.js/Deno (`./mod.ts`) and browsers (`./mod_web.ts`)
+- 📦 **Dual Entry Points**: Separate builds for Node.js/Deno (`src/index.ts`) and browsers (`src/web.ts`)
 - ⚡ **Native DOM APIs**: Browser version uses native DOMParser and DOM APIs for better performance
 - 🔧 **Build Optimization**: Enhanced build process with polyfill removal for browser compatibility
 - 📚 **Updated Documentation**: Added browser usage examples and API reference

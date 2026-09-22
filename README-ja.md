@@ -37,7 +37,7 @@ import {
 } from "jsr:@grakeice/netscape-bookmark-parser";
 ```
 
-> **注意:** JSR 版は Node.js/Deno ランタイムのみ対応です。ブラウザで利用する場合は npm パッケージをご利用ください。
+> **注意:** JSR 版は Node.js/Deno 用のエントリです。ブラウザでは npm の依存関係ゼロの `./web` エントリをご利用ください。
 
 ### ブラウザ
 
@@ -70,7 +70,7 @@ function handleFileUpload(event: Event) {
 <script type="importmap">
 	{
 		"imports": {
-			"netscape-bookmark-parser/web": "https://cdn.jsdelivr.net/npm/netscape-bookmark-parser@1.1.4/esm/mod_web.js"
+			"netscape-bookmark-parser/web": "https://cdn.jsdelivr.net/npm/netscape-bookmark-parser@1.1.4/dist/web.js"
 		}
 	}
 </script>
@@ -87,11 +87,11 @@ function handleFileUpload(event: Event) {
 	import {
 		BookmarksParser,
 		BookmarksTree,
-	} from "https://cdn.jsdelivr.net/npm/netscape-bookmark-parser@1.1.4/esm/mod_web.js";
+	} from "https://cdn.jsdelivr.net/npm/netscape-bookmark-parser@1.1.4/dist/web.js";
 </script>
 ```
 
-> **ブラウザサポート:** ブラウザ互換は npm パッケージ経由のみ。JSR パッケージには web 最適化版は含まれません。
+> **ブラウザサポート:** web 最適化版は npm の `./web` エントリから利用できます。ネイティブブラウザ API を使用し、DOM ライブラリへの依存はありません。
 
 > **注意:** web 最適化版は DOMParser 等のネイティブ API を利用し、Node.js 用ポリフィルを含まないため、ブラウザで軽量かつ高速です。
 
@@ -199,12 +199,12 @@ console.log(devFolder.get("GitHub")); // "https://github.com"
 
 ### Web 最適化版
 
-> **重要:** ブラウザサポートは npm インストールのみ。JSR 版にはブラウザ互換ビルドは含まれません。
+> **重要:** ブラウザサポートは npm の `./web` エントリから利用できます。
 
 このライブラリは Node.js 依存を排除し、ネイティブブラウザ API を利用する web 最適化版を提供します:
 
 ```typescript
-// npmのみで利用可能なweb最適化版
+// web最適化版
 import { BookmarksParser, BookmarksTree } from "netscape-bookmark-parser/web";
 ```
 
@@ -351,15 +351,27 @@ src/
     ├── BookmarksParser.test.ts # パーサーテスト
     └── index.ts             # エクスポート定義
 scripts/
-└── build_npm.ts             # NPMビルドスクリプト
+└── sync-jsr-version.mjs     # package.jsonとJSRバージョンの同期
 .github/
 └── workflows/
-    └── release.yml          # CI/CDパイプライン
-npm/                         # Node.jsビルド成果物
-├── esm/                     # ESモジュール
-├── package.json
-└── README.md
+    ├── changesets.yml        # ChangesetsによるバージョンPR
+    ├── ci.yml                # テスト・型検査・ビルド
+    └── release.yml           # NPM/JSR公開とGitHub Release
+dist/                        # 生成されるパッケージファイル（コミット対象外）
 ```
+
+## 開発とリリース
+
+pnpmで依存関係をインストールし、ローカル検証を実行します。
+
+```bash
+pnpm install
+pnpm test
+pnpm typecheck
+pnpm build
+```
+
+ユーザー向け変更には `pnpm changeset` でリリースノートを追加します。`main` へのpushでChangesetsがバージョンPRを作成し、マージ時に `package.json` の変更と `jsr.json` のバージョン同期が行われます。その後の `main` へのpushでNPM/JSRへ公開し、対応する `v<version>` GitタグとGitHub Releaseを作成します。
 
 ## サポート形式
 
@@ -472,7 +484,7 @@ MIT License - 詳細は[LICENSE](LICENSE)を参照してください。
 ### v1.1.0
 
 - 🌐 **ブラウザサポート**: ブラウザ用 web 最適化版を追加
-- 📦 **デュアルエントリーポイント**: Node.js/Deno 用（`./mod.ts`）とブラウザ用（`./mod_web.ts`）を分離
+- 📦 **デュアルエントリーポイント**: Node.js/Deno 用（`src/index.ts`）とブラウザ用（`src/web.ts`）を分離
 - ⚡ **ネイティブ DOM API**: ブラウザ版は DOMParser 等のネイティブ API で高速化
 - 🔧 **ビルド最適化**: ポリフィル除去等によるビルド強化
 - 📚 **ドキュメント更新**: ブラウザ利用例・API リファレンス追加

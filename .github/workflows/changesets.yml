@@ -1,0 +1,37 @@
+name: Changesets
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: changesets-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup pnpm and Node.js
+        uses: pnpm/setup@v3
+        with:
+          version: 12.4.2
+          require-lockfile: true
+          cache: true
+      - name: Create version pull request
+        uses: changesets/action@v1
+        with:
+          version: pnpm version-packages
+          commit: "chore: version packages"
+          title: "chore: version packages"
+          publish: ""
+          skipCI: "[skip ci]"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

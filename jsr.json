@@ -1,0 +1,17 @@
+{
+	"$schema": "https://jsr.io/schema/jsr.json",
+	"name": "@grakeice/netscape-bookmark-parser",
+	"version": "1.1.4",
+	"exports": {
+		".": "./src/index.ts"
+	},
+	"publish": {
+		"include": [
+			"src/**/*.ts",
+			"README.md",
+			"README-ja.md",
+			"LICENSE"
+		],
+		"exclude": ["**/*.test.ts", "src/web.ts", "src/web-dom.ts"]
+	}
+}

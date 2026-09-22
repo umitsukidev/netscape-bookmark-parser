@@ -2,44 +2,82 @@ name: Release to NPM and JSR
 
 on:
   push:
-    tags:
-      - "v*"
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: release-main
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  id-token: write
 
 jobs:
   release:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
-
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Setup Deno
-        uses: denoland/setup-deno@v2
         with:
-          deno-version: v2.x
-
-      - name: Extract version from tag
-        id: get_version
-        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
-
-      - name: Build npm package
-        run: deno task build:npm ${{ steps.get_version.outputs.VERSION }}
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "18"
-          registry-url: "https://registry.npmjs.org"
-
-      - name: Publish to NPM
+          fetch-depth: 0
+      - name: Check for a new version
+        id: version
+        shell: bash
         run: |
-          cd npm
-          npm publish
+          set -euo pipefail
+          version="$(node -p "require('./package.json').version")"
+          tag="v${version}"
+          if git rev-parse --verify "refs/tags/${tag}" >/dev/null 2>&1; then
+            echo "should_release=false" >> "$GITHUB_OUTPUT"
+            echo "${tag} already exists"
+            exit 0
+          fi
+          if ! git rev-parse HEAD^ >/dev/null 2>&1; then
+            changed=true
+          else
+            previous_version="$(git show HEAD^:package.json | node -e 'let data=""; process.stdin.on("data", chunk => data += chunk).on("end", () => process.stdout.write(JSON.parse(data).version));')"
+            changed=$([ "$version" != "$previous_version" ] && echo true || echo false)
+          fi
+          echo "should_release=${changed}" >> "$GITHUB_OUTPUT"
+          if [ "$changed" = true ]; then
+            echo "version=${version}" >> "$GITHUB_OUTPUT"
+            echo "tag=${tag}" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Setup pnpm and Node.js
+        if: steps.version.outputs.should_release == 'true'
+        uses: pnpm/setup@v3
+        with:
+          version: 12.4.2
+          require-lockfile: true
+          cache: true
+      - name: Test
+        if: steps.version.outputs.should_release == 'true'
+        run: pnpm test
+      - name: Typecheck
+        if: steps.version.outputs.should_release == 'true'
+        run: pnpm typecheck
+      - name: Build
+        if: steps.version.outputs.should_release == 'true'
+        run: pnpm build
+      - name: Publish to NPM
+        if: steps.version.outputs.should_release == 'true'
+        run: pnpm publish --no-git-checks --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
       - name: Publish to JSR
-        run: deno publish
+        if: steps.version.outputs.should_release == 'true'
+        run: pnpm dlx jsr publish
+      - name: Create Git tag
+        if: steps.version.outputs.should_release == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag "${{ steps.version.outputs.tag }}"
+          git push origin "${{ steps.version.outputs.tag }}"
+      - name: Create GitHub release
+        if: steps.version.outputs.should_release == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release create "${{ steps.version.outputs.tag }}" --title "${{ steps.version.outputs.tag }}" --generate-notes
