@@ -165,10 +165,11 @@ settings:
 importers:
 
   .:
-    devDependencies:
+    dependencies:
       '@b-fuze/deno-dom':
         specifier: jsr:@b-fuze/deno-dom@^0.1.49
         version: '@jsr/b-fuze__deno-dom@0.1.56'
+    devDependencies:
       '@changesets/cli':
         specifier: ^3.0.3
         version: 3.0.3
